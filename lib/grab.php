@@ -1,4 +1,5 @@
 <?php
+require_once('simple_html_dom.php');
 
 function get_manga($url){
 
@@ -61,4 +62,21 @@ function get_manga($url){
 
 }
 
-//jondes:3
+function get_manga_title($url){
+    $html = file_get_html($url);
+    $data = $html->find(".chapter-title-rtl");
+    $total_chapters = count($data);
+
+    // echo "Download $name\n";
+    echo "Total chapters : ".$total_chapters."\n\n";
+    echo "Starting download all chapter..\n";
+
+    $count = 1;
+    foreach ($data as $value) {
+        get_manga($value->find("a")[0]->href);
+        $count++;
+        if($count == $total_chapters+1){
+            echo "\n all chapter was downloaded, enjoy :D\n";
+        }
+    }
+}
